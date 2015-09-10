@@ -1,0 +1,28 @@
+<%= title [l('theme_manager.themes_list'), app_themes_path], "#{t('theme_manager.edit_theme', :uid => @app_theme.uid)} #{"Repository: #{@app_theme.repo_source_url}" if @app_theme.git_repository?}" %>
+
+<%= labelled_form_for @app_theme do |f| %>
+    <% if @app_theme.git_repository? %>
+        <p>
+           <label><%= @app_theme.repo_source_url %></label>
+        </p>
+    <% end %>
+    <div class="box tabular">
+       <p>
+          <%= f.text_field :name %>
+       </p>
+        <% if @app_theme.git_user_credential_auth? %>
+            <p>
+                <%= f.text_field :repo_user, :size => 20, :required => true %>
+            </p>
+            <p>
+                <%= f.password_field :repo_pwd, :size => 20 %>
+            </p>
+        <% end %>
+    </div>
+    <p>
+       <%= f.submit l(:button_update) %>
+       <% if @app_theme.git_repository? %>
+          <%= f.submit l(:button_update_repository), :name => 'update_repository' %>
+       <% end %>
+    </p>
+<% end %>

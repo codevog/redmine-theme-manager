@@ -1,0 +1,8 @@
+<%= title [l('theme_manager.themes_list'), app_themes_path], l('theme_manager.add_theme') %>
+
+<%= labelled_form_for @app_theme do |f| %>
+    <%= render :partial => 'app_theme_form', :locals => { :f => f } %>
+    <p>
+       <%= f.submit l(:button_create) %>
+    </p>
+<% end %>

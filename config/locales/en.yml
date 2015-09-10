@@ -1,0 +1,46 @@
+# English strings go here for Rails i18n
+en:
+  field_uid: "Theme ID"
+  field_source_type: "Theme source"
+  field_theme_archive: "Them zip archive"
+  field_repo_source_url: "Repository URL"
+  field_repo_credential_type: "Credential type"
+  field_repo_pwd: "Password"
+  field_repo_user: "User name"
+  field_deploy_key: "Deploy key"
+  button_update_repository: 'Update by repository'
+
+  theme_manager:
+    incorrect_type: 'Only .zip files allowed.'
+    incorrect_size: 'Maximum size: %{size}.'
+    file_not_found: 'Please choose file!'
+    theme_not_found: 'Theme not found!'
+    theme_exist: 'Theme already exist!'
+    choose_upload_variant: 'Choose upload variant!'
+    provide_repository_url: 'Please provide repository URL'
+    provide_repository_credentials: 'Please provide valid username and password for private repository.'
+    repository_url_invalid: 'Provided repository URL is invalid!'
+    repository_url: 'Repository URL'
+    git_error: 'Could not upload theme from git repository. Provided info is invalid.'
+    cant_delete_file: "Can't delete file %{file}. Please delete it by yourself."
+    upload_from: 'Upload from'
+    upload_local_label: 'Local computer'
+    upload_git_label: 'Git repository'
+    is_private_repository: 'Private repository'
+    repository_username: 'Username'
+    repository_password: 'Password'
+    upload_theme_label: 'Upload theme'
+    theme_not_valid: 'Theme is not valid! A theme should at least override application.css'
+    themes_list: "Themes"
+    add_theme: "Add theme"
+    edit_theme: "Edit theme [%{uid}]"
+    apply_theme: 'Apply theme'
+    reload_theme: 'Reload theme'
+  themes:
+    theme_name: "Name"
+    theme_actions: "Actions"
+    successful_deleted: "Successful deleted."
+    successful_uploaded: "Successful uploaded."
+    successful_apply: "Successful apply"
+    successful_reload: 'Successful reload'
+    wrong_source_type: 'Wrong source type!'

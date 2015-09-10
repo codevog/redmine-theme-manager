@@ -1,0 +1,83 @@
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'knockout-3.1.0.js', :plugin => 'theme_manager' %>
+    <%= javascript_include_tag 'custom_theme_uid_identifier.js', :plugin => 'theme_manager' %>
+<% end %>
+
+<%= error_messages_for @app_theme %>
+<div class="box tabular">
+    <p>
+      <%= f.text_field :name , :size => 50 %>
+    </p>
+    <p>
+        <%= f.text_field :uid , :size => 50, :required => true %>
+    </p>
+    <p>
+       <%= f.select :source_type, [], {}, {'data-bind' => "options: sourceTypes, value: themeSourceType, optionsValue: 'id', optionsText: 'title'"} %>
+    </p>
+    <!-- ko if: themeSourceType() == 'local' -->
+        <p>
+           <%= f.file_field :theme_archive %>
+        </p>
+    <!-- /ko -->
+
+    <!-- ko if: themeSourceType() == 'git' -->
+        <p>
+           <%= f.text_field :repo_source_url , :size => 150, :required => true, 'data-bind' => 'value: repoSourceUrl' %>
+        </p>
+        <p>
+           <%= f.select :repo_credential_type, [], {}, {'data-bind' => "options: repoCredentialTypes, value: repoCredentialType, optionsValue: 'id', optionsText: 'title'"} %>
+        </p>
+    <!-- /ko -->
+
+    <!-- ko if: repoCredentialType() == 1 -->
+        <p>
+           <%= f.text_field :repo_user, :size => 20, :required => true, 'data-bind' => 'value: repoUser' %>
+        </p>
+        <p>
+           <%= f.password_field :repo_pwd, :size => 20 %>
+        </p>
+    <!-- /ko -->
+    <!-- ko if: repoCredentialType() == 2 -->
+        <p>
+          <%= f.text_area :deploy_key, :size => "60x15", :required => true %>
+        </p>
+    <!-- /ko -->
+</div>
+
+
+<script type="text/javascript">
+   var viewModel = function(dbObject)
+   {
+       var self = this,
+           dbData = dbObject['app_theme'];
+
+       self.themeSourceType = ko.observable(dbData['source_type'] || 'local');
+       self.sourceTypes = ko.observableArray([{id: 'local', title: 'Upload file'}, {id: 'git', title: 'Git repository'}]);
+
+       self.repoCredentialType = ko.observable(dbData['repo_credential_type'] || 0);
+       self.repoCredentialTypes = ko.observableArray([{id: 0, title: 'Public repository'}, {id: 1, title: 'User credential'}]);
+
+       self.repoSourceUrl = ko.observable(dbData['repo_source_url'] || '');
+       self.repoUser = ko.observable(dbData['repo_user'] || '');
+
+       self.repoSourceUrl.subscribe(function(newValue){
+           if (newValue != '' && self.repoUser() == '')
+           {
+               var urlItems = newValue.split('/');
+               if (urlItems[2] && urlItems[2].split('@').length > 1)
+               {
+                   self.repoUser(urlItems[2].split('@')[0]);
+               }
+           }
+       });
+
+   }
+   var instanceViewModel = new viewModel(<%= @app_theme.to_json.html_safe %>);
+
+   $(document).ready(function(){
+       $('#app_theme_deploy_key').css({width: 'auto'});
+       ko.applyBindings(instanceViewModel);
+   });
+
+</script>
+

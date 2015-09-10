@@ -1,0 +1,5 @@
+<%= form_for @app_theme, :url => reload_app_theme_path(@app_theme.id), :method => 'POST' do |f| %>
+    <%= label_tag "Please enter password to repository" %>
+    <%= password_field_tag 'password' %>
+    <%= f.submit t('theme_manager.reload_theme'), :class => 'icon icon-reload' %>
+<% end %>

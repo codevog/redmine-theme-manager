@@ -1,0 +1,54 @@
+<%= error_messages_for 'query' %>
+<div class="contextual">
+    <%= link_to t('app_themes.settings.new_app_theme'), {:controller => "app_themes", :action => 'new'}, :class => 'icon icon-add' %>
+</div>
+
+<%= title l('theme_manager.themes_list') %>
+
+<% unless @app_themes.empty? %>
+    <%= form_for(AppTheme.new, :url => app_themes_path) do |f| %>
+        <p class="buttons">
+        </p>
+        <table class="list issues">
+            <thead>
+            <tr>
+               <% @query.inline_columns.each do |column| %>
+                    <%= column_header(column) %>
+                <% end %>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @app_themes.each do |app_theme| %>
+                <tr class="<%= cycle('odd', 'even') %>">
+                    <%= raw((@query.inline_columns.map do |column|
+                                if column.name == :uid
+                                  if app_theme.git_repository?
+                                    "<td class='name'>#{link_to "#{app_theme.uid} [#{app_theme.repo_source_url}]", edit_app_theme_path(app_theme)}</td>"
+                                  elsif app_theme.archive_filename.present?
+                                    "<td class='name'>#{link_to "#{app_theme.uid} [#{app_theme.archive_filename}]", edit_app_theme_path(app_theme)}</td>"
+                                  else
+                                    "<td class='name'>#{link_to app_theme.uid, edit_app_theme_path(app_theme)}</td>"
+                                  end
+                                else
+                                  "<td class='name'>#{column_content(column, app_theme)}</td>"
+                                end
+                            end).join) %>
+                    <td class="buttons">
+                        <% if @current_theme_instance.new_record? or app_theme.uid != @current_theme_instance.try(:value) %>
+                          <%= link_to t('theme_manager.apply_theme'), apply_app_theme_path(app_theme.id) %>
+                        <% end %>
+                        <% if app_theme.git_repository? %>
+                            <%= link_to t('theme_manager.reload_theme'), reload_app_theme_path(app_theme.id), :class => 'icon icon-reload' %>
+                        <% end %>
+                        <%= delete_link app_theme_path(app_theme.id) %>
+                    </td>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+    <% end %>
+    <p class="pagination"><%= pagination_links_full @app_themes_pages, @app_themes_count %></p>
+<% else %>
+    <p class="nodata"><%= t('app_themes.no_themes') %></p>
+<% end %>
