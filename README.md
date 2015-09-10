@@ -1,6 +1,6 @@
 # Themes manager plugin
 
-* Compatible with Redmine 2.6.x or higher
+* Compatible with Redmine 2.6.x
 
 ## Install
 
